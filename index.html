@@ -1,3 +1,5 @@
+<!-- Paste your HTML, CSS, or JavaScript code here -->
+<!-- Let me know what changes you would like to make after you've pasted it! -->
 <!-- Paste your website code here -->
 <!DOCTYPE html>
 <html lang="en">
@@ -80,12 +82,7 @@
                 82vw 82vh 0px 1px #fff, 91vw 12vh 0px 1px #fff, 63vw 12vh 1px 1px #fff, 2vw 36vh 0px 1px #fff, 
                 6vw 4vh 0px 1px #fff, 9vw 7vh 1px 0px #fff, 15vw 23vh 0px 1px #fff, 80vw 12vh 1px 1px #fff, 
                 5vw 8vh 0px 1px #fff, 42vw 82vh 0px 1px #fff, 82vw 82vh 1px 0px #fff, 91vw 12vh 1px 0px #fff, 
-                63vw 12vh 0px 1px #fff, 2vw 36vh 1px 0px #fff, 6vw 4vh 1px 0px #fff, 9vw 7vh 0px 1px #fff,
-                55vw 53vh 1px 1px #fff, 10vw 42vh 0px 0px #fff, 25vw 18vh 1px 1px #fff, 42vw 32vh 1px 0px #fff, 
-                82vw 42vh 0px 1px #fff, 91vw 22vh 0px 1px #fff, 33vw 22vh 1px 1px #fff, 2vw 66vh 0px 1px #fff, 
-                6vw 84vh 0px 1px #fff, 9vw 27vh 1px 0px #fff, 15vw 83vh 0px 1px #fff, 80vw 32vh 1px 1px #fff, 
-                5vw 28vh 0px 1px #fff, 42vw 12vh 0px 1px #fff, 82vw 92vh 1px 0px #fff, 91vw 32vh 1px 0px #fff, 
-                63vw 42vh 0px 1px #fff, 2vw 16vh 1px 0px #fff, 6vw 34vh 1px 0px #fff, 9vw 57vh 0px 1px #fff;
+                63vw 12vh 0px 1px #fff, 2vw 36vh 1px 0px #fff, 6vw 4vh 1px 0px #fff, 9vw 57vh 0px 1px #fff;
             animation: twinkle 3s infinite alternate;
         }
          .stars2::after {
@@ -116,7 +113,13 @@
         .btn-secondary:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
-        .feature-card {
+        
+        /* New Feature Card Styles */
+        .hanging-card-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+        .hanging-card {
             background-color: rgba(22, 18, 34, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -125,23 +128,68 @@
             opacity: 0;
             transform: translateY(20px);
             z-index: 1;
+            position: relative;
+            transform-origin: top center;
+            
+            /* Thread effect */
+            &::before {
+                content: '';
+                position: absolute;
+                top: -30px;
+                left: 50%;
+                width: 1px;
+                height: 30px;
+                background-color: rgba(224, 216, 255, 0.2);
+                transform: translateX(-50%);
+            }
         }
-        .feature-card:hover {
+        .hanging-card:hover {
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 0 20px rgba(192, 97, 255, 0.4);
             border-color: rgba(192, 97, 255, 0.3);
         }
-        .feature-card.is-visible {
+        .hanging-card.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
-        .feature-card.highlighted {
+        
+        /* Highlight and fall animation for the cards */
+        .hanging-card.highlighted {
             box-shadow: 0 0 25px rgba(192, 97, 255, 0.8), 0 0 10px rgba(224, 216, 255, 0.5) inset;
             transform: translateY(-8px) scale(1.03);
         }
-        .nav-link:hover {
-            color: #C061FF;
+
+        /* Revised freefall animation to use a dynamic CSS variable */
+        @keyframes freefall-to-bottom {
+            0% {
+                transform: translate(0, 0) rotateZ(var(--tilt-angle, 0deg));
+            }
+            100% {
+                transform: translate(0, var(--freefall-distance)) rotateZ(var(--tilt-angle, 0deg));
+            }
         }
+        
+        .falling {
+            position: fixed; /* Make the element fixed to the viewport */
+            animation: freefall-to-bottom 1.5s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
+            pointer-events: none; /* Disable clicks during animation */
+            will-change: transform; /* Hint to the browser for better performance */
+        }
+        
+        .staying-at-bottom {
+            animation-delay: 1.5s; /* Wait for the fall animation to finish */
+            animation-duration: 6s; /* Stay there for 6 seconds */
+            animation-name: stay-then-fade;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes stay-then-fade {
+            0% { opacity: 1; }
+            80% { opacity: 1; } /* Stay opaque for most of the duration */
+            100% { opacity: 0; } /* Fade out at the end */
+        }
+
+
         .fade-in {
             opacity: 0;
             transition: opacity 1s ease-in-out, transform 1s ease-in-out;
@@ -165,6 +213,7 @@
             background-image: radial-gradient(circle, rgba(0, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.03) 30%, rgba(13, 13, 26, 0) 70%);
             z-index: 0;
         }
+        
         /* Quantum Animations */
         .quantum-animation {
             position: absolute;
@@ -386,72 +435,69 @@
         </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- Features Section - Updated with hanging animation and tilt effect -->
     <section id="features" class="container mx-auto px-6 py-16 md:py-20 relative z-10">
         <div class="text-center mb-12 fade-in">
             <h2 class="text-3xl sm:text-4xl font-bold text-white">Powerful Features for Quantum Innovation</h2>
             <p class="text-base md:text-lg text-gray-400 mt-4 max-w-2xl mx-auto">Everything you need to accelerate your quantum computing journey in one integrated platform</p>
         </div>
-        <div class="features-wrapper">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-                <!-- Feature Card 1 -->
-                <div id="q-and-a-card" class="feature-card p-8 rounded-2xl">
+        <div class="features-wrapper flex flex-col items-center">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-x-16 gap-y-16 mt-16 md:mt-24">
+                <!-- Row 1 -->
+                <div id="q-and-a-card" class="hanging-card p-8 rounded-2xl w-full max-w-md mx-auto fade-in">
                     <div class="w-16 h-16 mb-6 flex items-center justify-center bg-purple-900/50 rounded-xl">
                         <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-white mb-3">Advanced Q&A System</h3>
                     <p class="text-gray-400">Post questions, get expert answers, and engage in deep discussions about quantum algorithms, hardware, and theory.</p>
                 </div>
-                <!-- Feature Card 2 -->
-                <div id="community-card" class="feature-card p-8 rounded-2xl">
+                <div id="community-card" class="hanging-card p-8 rounded-2xl w-full max-w-md mx-auto fade-in" style="transition-delay: 100ms;">
                     <div class="w-16 h-16 mb-6 flex items-center justify-center bg-purple-900/50 rounded-xl">
                         <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-white mb-3">Vibrant Community</h3>
                     <p class="text-gray-400">Connect with researchers, students, and faculty from leading quantum institutions worldwide.</p>
                 </div>
-                <!-- Feature Card 3 -->
-                <div id="gamified-card" class="feature-card p-8 rounded-2xl">
+                <div id="gamified-card" class="hanging-card p-8 rounded-2xl w-full max-w-md mx-auto fade-in" style="transition-delay: 200ms;">
                     <div class="w-16 h-16 mb-6 flex items-center justify-center bg-purple-900/50 rounded-xl">
                          <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-white mb-3">Gamified Learning</h3>
                     <p class="text-gray-400">Earn points, climb leaderboards, and complete quantum challenges to test your knowledge.</p>
                 </div>
-                <!-- Feature Card 4 -->
-                <div id="research-card" class="feature-card p-8 rounded-2xl">
+
+                <!-- Row 2 -->
+                <div id="research-card" class="hanging-card p-8 rounded-2xl w-full max-w-md mx-auto md:col-start-2 fade-in" style="transition-delay: 300ms;">
                     <div class="w-16 h-16 mb-6 flex items-center justify-center bg-purple-900/50 rounded-xl">
                         <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-white mb-3">Research Hub</h3>
                     <p class="text-gray-400">Access the latest papers, documentation, and breakthroughs in quantum computing research.</p>
                 </div>
-                 <!-- Feature Card 5 -->
-                <div id="collaboration-card" class="feature-card p-8 rounded-2xl">
+                <div id="collaboration-card" class="hanging-card p-8 rounded-2xl w-full max-w-md mx-auto md:col-start-1 md:row-start-2 fade-in" style="transition-delay: 400ms;">
                     <div class="w-16 h-16 mb-6 flex items-center justify-center bg-purple-900/50 rounded-xl">
                         <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-white mb-3">Team Collaboration</h3>
                     <p class="text-gray-400">Find project partners, join research teams, and showcase your quantum innovations.</p>
                 </div>
-                <!-- Feature Card 6 -->
-                <div id="challenges-card" class="feature-card p-8 rounded-2xl">
+                <div id="challenges-card" class="hanging-card p-8 rounded-2xl w-full max-w-md mx-auto md:col-start-3 md:row-start-2 fade-in" style="transition-delay: 500ms;">
                     <div class="w-16 h-16 mb-6 flex items-center justify-center bg-purple-900/50 rounded-xl">
                         <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-white mb-3">Interactive Challenges</h3>
                     <p class="text-gray-400">Solve coding and theory challenges across different difficulty levels and earn recognition.</p>
                 </div>
-                 <!-- Feature Card 7 -->
-                <div id="faculty-card" class="feature-card p-8 rounded-2xl">
+
+                <!-- Row 3 -->
+                <div id="faculty-card" class="hanging-card p-8 rounded-2xl w-full max-w-md mx-auto fade-in" style="transition-delay: 600ms;">
                     <div class="w-16 h-16 mb-6 flex items-center justify-center bg-purple-900/50 rounded-xl">
                         <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-white mb-3">Faculty Corner</h3>
                     <p class="text-gray-400">Direct access to quantum computing experts, professors, and industry leaders.</p>
                 </div>
-                <!-- Feature Card 8 -->
-                <div id="showcase-card" class="feature-card p-8 rounded-2xl">
+                <div id="showcase-card" class="hanging-card p-8 rounded-2xl w-full max-w-md mx-auto fade-in" style="transition-delay: 700ms;">
                     <div class="w-16 h-16 mb-6 flex items-center justify-center bg-purple-900/50 rounded-xl">
                         <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
@@ -494,14 +540,14 @@
             <div>
                 <h4 class="text-lg font-semibold text-white mb-4">Platform</h4>
                 <ul class="space-y-3">
-                    <li><a href="#" onclick="highlightFeature(event, 'q-and-a-card')" class="text-gray-400 hover:text-white">Advanced Q&A System</a></li>
-                    <li><a href="#" onclick="highlightFeature(event, 'community-card')" class="text-gray-400 hover:text-white">Vibrant Community</a></li>
-                    <li><a href="#" onclick="highlightFeature(event, 'gamified-card')" class="text-gray-400 hover:text-white">Gamified Learning</a></li>
-                    <li><a href="#" onclick="highlightFeature(event, 'research-card')" class="text-gray-400 hover:text-white">Research Hub</a></li>
-                    <li><a href="#" onclick="highlightFeature(event, 'collaboration-card')" class="text-gray-400 hover:text-white">Team Collaboration</a></li>
-                    <li><a href="#" onclick="highlightFeature(event, 'challenges-card')" class="text-gray-400 hover:text-white">Interactive Challenges</a></li>
-                    <li><a href="#" onclick="highlightFeature(event, 'faculty-card')" class="text-gray-400 hover:text-white">Faculty Corner</a></li>
-                    <li><a href="#" onclick="highlightFeature(event, 'showcase-card')" class="text-gray-400 hover:text-white">Project Showcase</a></li>
+                    <li><a href="#q-and-a-card" onclick="highlightFeature(event, 'q-and-a-card')" class="text-gray-400 hover:text-white">Advanced Q&A System</a></li>
+                    <li><a href="#community-card" onclick="highlightFeature(event, 'community-card')" class="text-gray-400 hover:text-white">Vibrant Community</a></li>
+                    <li><a href="#gamified-card" onclick="highlightFeature(event, 'gamified-card')" class="text-gray-400 hover:text-white">Gamified Learning</a></li>
+                    <li><a href="#research-card" onclick="highlightFeature(event, 'research-card')" class="text-gray-400 hover:text-white">Research Hub</a></li>
+                    <li><a href="#collaboration-card" onclick="highlightFeature(event, 'collaboration-card')" class="text-gray-400 hover:text-white">Team Collaboration</a></li>
+                    <li><a href="#challenges-card" onclick="highlightFeature(event, 'challenges-card')" class="text-gray-400 hover:text-white">Interactive Challenges</a></li>
+                    <li><a href="#faculty-card" onclick="highlightFeature(event, 'faculty-card')" class="text-gray-400 hover:text-white">Faculty Corner</a></li>
+                    <li><a href="#showcase-card" onclick="highlightFeature(event, 'showcase-card')" class="text-gray-400 hover:text-white">Project Showcase</a></li>
                 </ul>
             </div>
         </div>
@@ -584,27 +630,44 @@
             }
         }
 
-        // Highlight a feature card
+        // Highlight and free-fall animation for a feature card
         function highlightFeature(event, cardId) {
             event.preventDefault();
             const card = document.getElementById(cardId);
             if (!card) return;
-
-            // Scroll to the feature card's position
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            // Use a timeout to apply the highlight after the scroll has likely started
-            setTimeout(() => {
-                // Remove highlight from any other card
-                document.querySelectorAll('.feature-card.highlighted').forEach(c => c.classList.remove('highlighted'));
-                
-                card.classList.add('highlighted');
-                
-                // Remove the highlight after 2.5 seconds
-                setTimeout(() => {
-                    card.classList.remove('highlighted');
-                }, 2500); 
-            }, 600); // Delay to allow for smooth scroll animation
+        
+            // Get the card's current position and dimensions relative to the viewport
+            const rect = card.getBoundingClientRect();
+            
+            // Calculate the exact distance the card needs to fall
+            // The goal is to make it land just above the bottom of the viewport
+            const fallDistance = window.innerHeight - rect.top - rect.height - 20; // 20px is an offset from the bottom
+            
+            // Set the CSS custom property for the animation
+            card.style.setProperty('--freefall-distance', `${fallDistance}px`);
+        
+            // Set initial position as fixed to enable animation from its current spot
+            card.style.position = 'fixed';
+            card.style.left = `${rect.left}px`;
+            card.style.top = `${rect.top}px`;
+            
+            // Start the falling animation
+            card.classList.add('falling');
+        
+            // Listen for the end of the falling animation
+            card.addEventListener('animationend', (e) => {
+                if (e.animationName === 'freefall-to-bottom') {
+                    // Once the fall is over, add the staying class to pause and fade
+                    card.classList.remove('falling');
+                    card.classList.add('staying-at-bottom');
+                    
+                    // After the stay duration, remove the card entirely
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                        card.classList.remove('staying-at-bottom');
+                    }, 6000); // 6 seconds
+                }
+            }, { once: true });
         }
 
         // Intersection Observer for fade-in animations
@@ -620,7 +683,7 @@
             threshold: 0.1
         });
 
-        const targets = document.querySelectorAll('.fade-in, .feature-card');
+        const targets = document.querySelectorAll('.fade-in, .hanging-card');
         targets.forEach(target => {
             observer.observe(target);
         });
@@ -795,11 +858,39 @@
             }
         }
 
+        // Tilt effect for the hanging cards on mobile devices
+        function setupTiltEffect() {
+            // Check if device orientation is supported and we're likely on a mobile device
+            if (window.DeviceOrientationEvent) {
+                const isMobile = window.matchMedia("(max-width: 768px)").matches;
+                if (!isMobile) return;
+
+                const cards = document.querySelectorAll('.hanging-card');
+
+                window.addEventListener('deviceorientation', (event) => {
+                    // Gamma is the left-to-right tilt in degrees, where a value of -90° to +90° corresponds to the device being tilted from landscape left to landscape right
+                    const gamma = event.gamma; 
+
+                    if (gamma !== null) {
+                        // Map gamma to a small rotation angle for the sway effect
+                        const rotation = Math.max(-10, Math.min(10, gamma / 3)); // Clamp value between -10 and 10 degrees
+
+                        cards.forEach(card => {
+                            // Use CSS custom property to apply the rotation
+                            card.style.setProperty('--tilt-angle', `${rotation}deg`);
+                            card.style.transform = `rotateZ(${rotation}deg)`;
+                        });
+                    }
+                }, true);
+            }
+        }
+
         // Call the setup functions after the DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             setupHeadingAnimation();
             setupScrollToTop();
             setupTypingAnimation();
+            setupTiltEffect();
         });
     </script>
 
